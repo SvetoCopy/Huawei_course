@@ -15,10 +15,7 @@ char** ReadFile(const char* name) {
 
     size_t i = 0;
     while (fgets(buff, 100, f) != NULL) {
-        printf("%s", buff);
-        char* str = (char*)calloc(strlen(buff), sizeof(char));
-        strcpy(str, buff);
-        data[i] = str;
+        data[i] = _strdup(buff);
         i++;
     }
     return data;  
