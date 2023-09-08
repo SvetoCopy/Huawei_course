@@ -18,6 +18,7 @@ char** ReadFile(const char* name) {
         data[i] = _strdup(buff);
         i++;
     }
+    delete buff;
     return data;  
 }
 
