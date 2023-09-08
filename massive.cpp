@@ -1,36 +1,58 @@
-﻿// massive.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
+#include <string.h>
+size_t row_size = 100;
 
-void ReadFile(char str[][100], const char* name) {
-    size_t i = 0;
+char* getch(char* text, size_t i, size_t j) {
+    return text + row_size * i + j;
+}
+
+char* getstr(char* text, size_t i) {
+    return text + row_size * i;
+}
+
+void setch(char* text, size_t i, size_t j, char change) {
+    *(text + row_size * i + j) = change;
+}
+
+void setstr(char* text, size_t i, const char* change) {
+    strcpy(text, change);
+}
+
+char* ReadFile(const char* name) {
+    char* text = (char*)calloc(10000, sizeof(char));
+    char* change_ptr = text;
     FILE* f = NULL;
+
     fopen_s(&f, name, "r");
 
-    assert(f != NULL);
-
-    while (fgets(str[i], 100, f) != NULL) {
-        printf("%s", str[i]);
-        i++;
+    size_t i = 0;
+    char symbol = fgetc(f);
+    while (symbol != EOF) {
+        if (symbol == '\n') {
+            symbol = fgetc(f);
+            i++;
+            *change_ptr = '\0';
+            change_ptr = text + i * row_size;
+            continue;
+        }
+        *change_ptr = symbol;
+        change_ptr++;
+        symbol = fgetc(f);
     }
+    //printf("%s", text);
+    
+    *change_ptr = '\0';
+    return text;
 }
 int main()
 {
     char str[10][100] = {};
     const char* name = "text.txt";
  
-    ReadFile(str, name);
+    char* txt = ReadFile(name);
+    printf("%s", getstr(txt, 2));
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
