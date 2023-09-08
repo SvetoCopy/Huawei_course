@@ -6,19 +6,19 @@
 #include <string.h>
 size_t row_size = 100;
 
-char* getch(char* text, size_t i, size_t j) {
+char* GetCh(char* text, size_t i, size_t j) {
     return text + row_size * i + j;
 }
 
-char* getstr(char* text, size_t i) {
+char* GetStr(char* text, size_t i) {
     return text + row_size * i;
 }
 
-void setch(char* text, size_t i, size_t j, char change) {
+void SetCh(char* text, size_t i, size_t j, char change) {
     *(text + row_size * i + j) = change;
 }
 
-void setstr(char* text, size_t i, const char* change) {
+void SetStr(char* text, size_t i, const char* change) {
     strcpy(text, change);
 }
 
@@ -43,8 +43,7 @@ char* ReadFile(const char* name) {
         change_ptr++;
         symbol = fgetc(f);
     }
-    //printf("%s", text);
-    
+
     *change_ptr = '\0';
     return text;
 }
@@ -54,5 +53,5 @@ int main()
     const char* name = "text.txt";
  
     char* txt = ReadFile(name);
-    printf("%s", getstr(txt, 2));
+    printf("%s", GetStr(txt, 2));
 }
