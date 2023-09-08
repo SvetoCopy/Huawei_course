@@ -4,54 +4,29 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-size_t row_size = 100;
 
-char* GetCh(char* text, size_t i, size_t j) {
-    return text + row_size * i + j;
-}
-
-char* GetStr(char* text, size_t i) {
-    return text + row_size * i;
-}
-
-void SetCh(char* text, size_t i, size_t j, char change) {
-    *(text + row_size * i + j) = change;
-}
-
-void SetStr(char* text, size_t i, const char* change) {
-    strcpy(text, change);
-}
-
-char* ReadFile(const char* name) {
-    char* text = (char*)calloc(10000, sizeof(char));
-    char* change_ptr = text;
+char** ReadFile(const char* name) {
+    char* buff = (char*)calloc(200, sizeof(char));
     FILE* f = NULL;
+    char* data[10];
 
     fopen_s(&f, name, "r");
+    assert(f != NULL);
 
     size_t i = 0;
-    char symbol = fgetc(f);
-    while (symbol != EOF) {
-        if (symbol == '\n') {
-            symbol = fgetc(f);
-            i++;
-            *change_ptr = '\0';
-            change_ptr = text + i * row_size;
-            continue;
-        }
-        *change_ptr = symbol;
-        change_ptr++;
-        symbol = fgetc(f);
+    while (fgets(buff, 100, f) != NULL) {
+        printf("%s", buff);
+        char* str = (char*)calloc(strlen(buff), sizeof(char));
+        strcpy(str, buff);
+        data[i] = str;
+        i++;
     }
-
-    *change_ptr = '\0';
-    return text;
+    return data;  
 }
+
 int main()
 {
-    char str[10][100] = {};
     const char* name = "text.txt";
  
-    char* txt = ReadFile(name);
-    printf("%s", GetStr(txt, 2));
+    char** txt = ReadFile(name);
 }
